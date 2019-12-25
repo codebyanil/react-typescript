@@ -20,12 +20,9 @@ const Storys = () => {
   const [selectedStoryId, setSelectedStoryId] = useState(null);
   const [currentStory, setCurrentStory] = useState({
     id: null,
-    name: '',
-    email: '',
+    title: '',
     address: '',
-    phone: '',
-    photo_url: '',
-    dob: '',
+    date: '',
     description: '',
   });
 
