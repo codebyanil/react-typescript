@@ -7,6 +7,8 @@ import { listContact } from '../../api/contact';
 import { listStory } from '../../api/story';
 import { getToken } from '../../library/auth';
 import { RequestData } from '../../types';
+import { aggregate } from '../../api/report';
+import Card from './Card';
 
 interface Props {
   history: History
@@ -15,6 +17,7 @@ interface Props {
 const Dashboard = ({ history }: Props) => {
   const [contacts, setContacts] = useState([]);
   const [book, setBook] = useState([]);
+  const [count, setCount] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   // fetch contacts
@@ -24,8 +27,18 @@ const Dashboard = ({ history }: Props) => {
       per_page: 5,
     };
     listContact(params)
-      .then((response:RequestData) => {
+      .then((response: RequestData) => {
         setContacts(response.data || []);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const Report = () => {
+    aggregate()
+      .then((response: RequestData) => {
+        setCount(response || []);
       })
       .finally(() => {
         setIsLoading(false);
@@ -52,6 +65,7 @@ const Dashboard = ({ history }: Props) => {
     }
     ContactList();
     BookList();
+    Report();
   }, [history]);
 
   return (
@@ -66,8 +80,7 @@ const Dashboard = ({ history }: Props) => {
           </nav>
           {/* <!--Cards Component--!> */}
           <section className="section-cards ">
-            {/* <!--Card component--!> */}
-            {/* <Card count={count} /> */}
+            <Card count={count} />
 
             {/* <!--Contacts Component--!> */}
             <ContactTable
