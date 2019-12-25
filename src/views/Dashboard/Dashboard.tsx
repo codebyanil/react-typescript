@@ -1,15 +1,91 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { History } from 'history';
 import MainLayout from '../../layouts/MainLayout';
+import ContactTable from './ContactTable';
+import StoryTable from './StoryTable';
+import { listContact } from '../../api/contact';
+import { listStory } from '../../api/story';
+import { getToken } from '../../library/auth';
+import { RequestData } from '../../types';
 
 interface Props {
-  [key: string]: any;
+  history: History
 }
 
-const Dashboard = () => {
+const Dashboard = ({ history }: Props) => {
+  const [contacts, setContacts] = useState([]);
+  const [book, setBook] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // fetch contacts
+  const ContactList = () => {
+    setIsLoading(true);
+    const params = {
+      per_page: 5,
+    };
+    listContact(params)
+      .then((response:RequestData) => {
+        setContacts(response.data || []);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  // fetch  story
+  const BookList = () => {
+    setIsLoading(true);
+    const params = {
+      per_page: 5,
+    };
+    listStory(params)
+      .then((response) => {
+        setBook(response.data || []);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (!getToken()) {
+      history.push('/login');
+    }
+    ContactList();
+    BookList();
+  }, [history]);
+
   return (
-    <MainLayout>
-      <p>This is Dashboard</p>
-    </MainLayout>
+    <div>
+      <MainLayout />
+      <div className="wrapper-main-content auto">
+        <div className="container main-content color-gray-light pt-4">
+          <nav className="nav flex-column">
+            <div className="sidebar-header">
+              <h3>Dashboard</h3>
+            </div>
+          </nav>
+          {/* <!--Cards Component--!> */}
+          <section className="section-cards ">
+            {/* <!--Card component--!> */}
+            {/* <Card count={count} /> */}
+
+            {/* <!--Contacts Component--!> */}
+            <ContactTable
+              contacts={contacts}
+              isLoading={isLoading}
+            />
+
+            {/* <!--StoryTable Component--!> */}
+            <StoryTable
+              books={book}
+              isLoading={isLoading}
+            />
+          </section>
+        </div>
+      </div>
+
+    </div>
+
   );
 };
 

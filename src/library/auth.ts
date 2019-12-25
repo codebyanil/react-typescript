@@ -1,4 +1,4 @@
-const AUTH_KEY = 'app-auth'; // @todo use the auth key from env
+const AUTH_KEY = 'X-Auth-Token'; // @todo use the auth key from env
 
 export function getToken() {
   return localStorage.getItem(AUTH_KEY);

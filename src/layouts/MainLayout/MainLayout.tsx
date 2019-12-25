@@ -1,16 +1,17 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
+import Header from '../Header';
 
-interface Props {
-  children: ReactNode;
-  [key: string]: any;
-}
 
-const Dashboard = ({ children }: Props) => {
+const MainLayout = () => {
   return (
-    <div className="main-layout">
-      { children }
+    <div>
+      <div className="wrapper-main-content">
+        <div className="panel panel-default">
+          <Header />
+        </div>
+      </div>
     </div>
+
   );
 };
-
-export default Dashboard;
+export default MainLayout;

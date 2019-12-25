@@ -10,8 +10,8 @@ interface RequestConfig {
 }
 
 const service = axios.create({
-  baseURL: process.env.API_URL, // @todo use the api from env
-  timeout: 60000,
+  baseURL: 'http://replay.develop.com/api/',
+  timeout: 600000,
 });
 
 function isAuthError(error: AxiosError) {
@@ -27,40 +27,35 @@ service.interceptors.request.use((config) => ({
   },
 }));
 
-function getResErrorMessage({ data }: AxiosResponse) {
-  if (data.errors) return data.errors;
-  if (data.message) return data.message;
-  return null;
-}
-
 // Response Interceptor
 service.interceptors.response.use(
-  (response) => {
-    const res = response.data;
-    if (res.status === false) {
-      return Promise.reject(res.message || 'error');
+  (response: AxiosResponse) => {
+    const { data } = response;
+    if (data.status === false) {
+      return Promise.reject(new Error(data.message || 'There was an error.'));
     }
-    return res;
+
+    return data;
   },
-  (thrown) => {
-    if (!thrown) {
-      const errorMessage = 'There was an error';
-      return Promise.reject(errorMessage);
+  (error: AxiosError) => {
+    if (!error) {
+      return Promise.reject(new Error('There was an error.'));
     }
-    if (isAuthError(thrown)) {
+    if (isAuthError(error)) {
       removeToken();
       window.location.reload();
-      const err = 'Session expired!';
-      return Promise.reject(err);
+      return Promise.reject(new Error('Session expired!'));
     }
-    if (axios.isCancel(thrown)) return Promise.reject(thrown.message);
-    const { message, response } = thrown;
-    const errorMessage = getResErrorMessage(response) || message;
-    return Promise.reject(errorMessage);
+    if (axios.isCancel(error)) {
+      return Promise.reject(error);
+    }
+
+    const { response } = error;
+    return Promise.reject(response?.data || error);
   },
 );
 
-const cancelable: { [key: string]: Canceler } = {};
+const cancelable: {[key: string]: Canceler} = {};
 
 export default function ({ cancelPrevious, ...config }: RequestConfig) {
   if (cancelPrevious) {
