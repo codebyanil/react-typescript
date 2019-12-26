@@ -11,7 +11,6 @@ const EditStory = ({ story, updateStory }:Props) => {
   // int the data
   const [currentStory, setCurrentStory] = useState(story);
   const [isLoading, setIsLoading] = useState(false);
-
   // using useEffect
   useEffect(() => {
     setCurrentStory(story);
@@ -106,9 +105,9 @@ const EditStory = ({ story, updateStory }:Props) => {
                   />
                 </div>
                 <div className="form-group col-mod-6">
-                  <label htmlFor="title">DOB:</label>
+                  <label htmlFor="title">Date:</label>
                   <input
-                    type="date"
+                    type="datetime"
                     ref={date}
                     className="form-control"
                     name="dob"

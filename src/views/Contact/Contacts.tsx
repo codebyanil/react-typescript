@@ -13,6 +13,7 @@ const Contacts = () => {
   const [contacts, setContacts] = useState<Array<Contact>>([]);
   const per_page:any = useRef();
   const search:any = useRef();
+  const unmounted:any = useRef(false);
   const Page = [5, 10, 20, 50];
   const [perpage] = useState(Page);
   const [page, setPage] = useState('');
@@ -39,7 +40,9 @@ const Contacts = () => {
         setContacts(response.data || []);
       })
       .finally(() => {
-        setIsLoading(false);
+        if (!unmounted.current) {
+          setIsLoading(false);
+        }
       });
   };
 
@@ -72,6 +75,7 @@ const Contacts = () => {
 
   useEffect(() => {
     ContactList();
+    return () => { unmounted.current = true }
   }, [isLoading]);
 
   return (
@@ -100,7 +104,7 @@ const Contacts = () => {
                 to="/"
                 className="btn btn-primary mr-2 float-right"
               >
-                <i className="fa fa-arrow-left" />
+                <i className="fa fa-arrow-left mr-1" />
                 Back
               </Link>
             </h4>
