@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import PageLoading from '../../components/elements/Loading';
@@ -30,7 +30,8 @@ const Contacts = () => {
     description: '',
   });
 
-  const ContactList = () => {
+  const ContactList = useCallback(() => {
+    setIsLoading(true);
     const params = {
       per_page: per_page.current.value || null,
       keyword: search.current.value || null,
@@ -44,7 +45,7 @@ const Contacts = () => {
           setIsLoading(false);
         }
       });
-  };
+  }, []);
 
   const handlePage = (event:any) => {
     const selected = event.target.value;
@@ -56,18 +57,19 @@ const Contacts = () => {
 
   // add contact
   function addContact() {
+    setIsLoading(true);
     ContactList();
   }
 
   // delete contact
   function contactDelete(contactId:any) {
-    setIsLoading(false);
+    setIsLoading(true);
     setContacts(contacts.filter((contact) => contact.id !== contactId));
     ContactList();
   }
   // update contact
   function updateContact(id:number, updateContact:any) {
-    setIsLoading(false);
+    setIsLoading(true);
     setContacts(contacts.map((contact) => (contact.id === id ? updateContact : contact)));
     ContactList();
   }
@@ -75,8 +77,10 @@ const Contacts = () => {
 
   useEffect(() => {
     ContactList();
-    return () => { unmounted.current = true }
-  }, [isLoading]);
+    return () => {
+      unmounted.current = true;
+    };
+  }, [ContactList]);
 
   return (
     <div className="container">

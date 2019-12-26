@@ -40,7 +40,7 @@ Back
                     className="p-2"
                   >
                     {' '}
-Name:
+                    Name:
                   </th>
                   <td className="p-2">{contacts.name}</td>
                 </tr>
@@ -49,7 +49,7 @@ Name:
                     scope="row"
                     className="p-2"
                   >
-Email:
+                 Email:
                   </th>
                   <td className="p-2">{contacts.email}</td>
                 </tr>
@@ -58,7 +58,7 @@ Email:
                     scope="row"
                     className="p-2"
                   >
-Address:
+                 Address:
                   </th>
                   <td className="p-2">{contacts.address}</td>
                 </tr>
@@ -67,7 +67,7 @@ Address:
                     scope="row"
                     className="p-2"
                   >
-Phone:
+                  Phone:
                   </th>
                   <td className="p-2">{contacts.phone}</td>
                 </tr>
@@ -76,7 +76,7 @@ Phone:
                     scope="row"
                     className="p-2"
                   >
-DOB:
+                  DOB:
                   </th>
                   <td className="p-2">{contacts.dob ? contacts.dob : 'N/A'}</td>
                 </tr>
@@ -85,7 +85,7 @@ DOB:
                     scope="row"
                     className="p-2"
                   >
-Description:
+                  Description:
                   </th>
                   <td className="p-2">{contacts.description ? contacts.description : 'N/A'}</td>
                 </tr>

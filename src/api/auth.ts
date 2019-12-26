@@ -16,12 +16,10 @@ export function registerUser(data: object) {
   });
 }
 
-export function fetchUserMeta(params: { cancelPrevious: boolean }) {
+export function fetchUserMeta() {
   return request({
     url: 'auth/user-meta',
     method: 'get',
-    params,
-    cancelPrevious: params.cancelPrevious || true,
   });
 }
 
@@ -32,7 +30,7 @@ export function logout() {
   });
 }
 
-export function changePassword(id: number, data: object) {
+export function changePassword(data: object) {
   return request({
     url: 'auth/update-password',
     method: 'patch',

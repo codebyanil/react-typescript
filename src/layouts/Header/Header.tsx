@@ -32,7 +32,7 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link to="/setting">
+            <Link to="/profile">
               <i className="fa fa-cog mr-2" />
               <span className="ml-1">Settings</span>
             </Link>

@@ -8,6 +8,7 @@ import Contacts from '../views/Contact';
 import ViewContact from '../views/ContactView/ViewContact';
 import Storys from '../views/Story/Storys';
 import ViewStory from '../views/StoryView/ViewStory';
+import Profile from '../views/Setting/Profile';
 
 
 const Router = () => {
@@ -53,6 +54,11 @@ const Router = () => {
         exact
         path="/stories/:id"
         component={ViewStory}
+      />
+      <Route
+        exact
+        path="/profile"
+        component={Profile}
       />
     </AppRouter>
   );

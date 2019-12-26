@@ -8,7 +8,9 @@ export interface RequestData {
 export interface RequestList extends RequestData {
   data: [];
   meta: {};
-  links:{};
+  links: {};
+  message?: string;
+  errors?: []
 }
 
 export interface RequestError {

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { DatePicker } from 'antd';
 import MainLayout from '../../layouts/MainLayout';
 import PageLoading from '../../components/elements/Loading';
 import { RequestData, Story } from '../../types';
@@ -13,7 +14,10 @@ const Storys = () => {
   const [stories, setStories] = useState<Array<Story>>([]);
   const per_page: any = useRef();
   const search: any = useRef();
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const Page = [5, 10, 20, 50];
+  const { RangePicker } = DatePicker;
   const [perpage] = useState(Page);
   const [page, setPage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -26,10 +30,13 @@ const Storys = () => {
     description: '',
   });
 
-  const StoryList = () => {
+  const StoryList = useCallback(() => {
+    setIsLoading(true);
     const params = {
       per_page: per_page.current.value || null,
       keyword: search.current.value || null,
+      startDate: startDate || null,
+      endDate: endDate || null,
     };
     listStory(params)
       .then((response: RequestData) => {
@@ -38,7 +45,7 @@ const Storys = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }, [endDate, startDate]);
 
   const handlePage = (event: any) => {
     const selected = event.target.value;
@@ -47,22 +54,29 @@ const Storys = () => {
       StoryList();
     }
   };
+  const handleDate = (dates: any, stringDates: any) => {
+    setIsLoading(true);
+    setStartDate(stringDates[0]);
+    setEndDate(stringDates[1]);
+    StoryList();
+  };
 
   // add story
   function addStory() {
+    setIsLoading(true);
     StoryList();
   }
 
   // update contact
-  function updateStory(id:number, updateStory:any) {
-    setIsLoading(false);
+  function updateStory(id: number, updateStory: any) {
+    setIsLoading(true);
     setStories(stories.map((story) => (story.id === id ? updateStory : story)));
     StoryList();
   }
 
   // delete contact
   function storyDelete(storyId: any) {
-    setIsLoading(false);
+    setIsLoading(true);
     setStories(stories.filter((story) => story.id !== storyId));
     StoryList();
   }
@@ -70,7 +84,7 @@ const Storys = () => {
 
   useEffect(() => {
     StoryList();
-  }, [isLoading]);
+  }, [StoryList]);
 
   return (
     <div className="container">
@@ -98,7 +112,7 @@ const Storys = () => {
                 to="/"
                 className="btn btn-primary mr-2 float-right"
               >
-                <i className="fa fa-arrow-left" />
+                <i className="fa fa-arrow-left mr-1" />
                 Back
               </Link>
             </h4>
@@ -125,7 +139,16 @@ const Storys = () => {
                 })}
               </select>
             </div>
-            <div className="form-group d-flex flex-row float-right w-50">
+            <div className="form-group d-flex flex-row float-right">
+              <label
+                htmlFor="search"
+                className="mr-2 mt-2"
+              >
+                DateRange:
+              </label>
+              <RangePicker onChange={handleDate} />
+            </div>
+            <div className="form-group d-flex flex-row float-right">
               <label
                 htmlFor="search"
                 className="mr-2 mt-2"
