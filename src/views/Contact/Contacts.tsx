@@ -1,9 +1,9 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import PageLoading from '../../components/elements/Loading';
 import Table from './Table';
-import { RequestData, Contact } from '../../types';
+import { Contact, RequestData } from '../../types';
 import AddContact from './AddContact';
 import { listContact } from '../../api/contact';
 import DeleteContact from './DeleteContact';
@@ -11,9 +11,9 @@ import EditContact from './EditContact';
 
 const Contacts = () => {
   const [contacts, setContacts] = useState<Array<Contact>>([]);
-  const per_page:any = useRef();
-  const search:any = useRef();
-  const unmounted:any = useRef(false);
+  const per_page: any = useRef();
+  const search: any = useRef();
+  const unmounted: any = useRef(false);
   const Page = [5, 10, 20, 50];
   const [perpage] = useState(Page);
   const [page, setPage] = useState('');
@@ -37,7 +37,7 @@ const Contacts = () => {
       keyword: search.current.value || null,
     };
     listContact(params)
-      .then((response:RequestData) => {
+      .then((response: RequestData) => {
         setContacts(response.data || []);
       })
       .finally(() => {
@@ -47,7 +47,7 @@ const Contacts = () => {
       });
   }, []);
 
-  const handlePage = (event:any) => {
+  const handlePage = (event: any) => {
     const selected = event.target.value;
     if (selected !== page) {
       setPage(event.target.value);
@@ -62,13 +62,14 @@ const Contacts = () => {
   }
 
   // delete contact
-  function contactDelete(contactId:any) {
+  function contactDelete(contactId: any) {
     setIsLoading(true);
     setContacts(contacts.filter((contact) => contact.id !== contactId));
     ContactList();
   }
+
   // update contact
-  function updateContact(id:number, updateContact:any) {
+  function updateContact(id: number, updateContact: any) {
     setIsLoading(true);
     setContacts(contacts.map((contact) => (contact.id === id ? updateContact : contact)));
     ContactList();
